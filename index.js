@@ -33,5 +33,20 @@ app.post('/api/posts', (req, res) => {
     res.json({ id: result.lastInsertRowid, success: true});
 });
 
+// PUT 
+app.put('/api/posts/:id', (req, res) => {
+    const post = req.body;
+    const statement = db.prepare('UPDATE posts SET title = ?, content = ? WHERE id = ?');
+    const result = statement.run(post.title, post.content, req.params.id);
+    res.json({changes: result.changes, success: true});
+});
+
+// DELETE
+app.delete('/api/posts/:id', (req, res) => {
+    const statement = db.prepare('DELETE FROM posts WHERE id = ?');
+    const result = statement.run(req.params.id);
+    res.json({succsess: true});
+});
+
 /* Start server */
 app.listen(3000, console.log('Server starter on port 3000'));
